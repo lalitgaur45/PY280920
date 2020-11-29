@@ -4,4 +4,3 @@ class BookItem:
         self.book = book
         self.isbn = isbn
         self.rack = rack
-        

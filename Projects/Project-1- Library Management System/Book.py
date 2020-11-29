@@ -9,6 +9,7 @@ class Book:
         self.pages = pages
         self.total_count = 0
         self.book_item = []
+
         
     def addBookItem(self,isbn,rack):
         b = BookItem(self,isbn,rack)
