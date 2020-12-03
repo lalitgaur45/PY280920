@@ -1,26 +1,25 @@
 # -*- coding: utf-8 -*-
 
 class User:
-    def __init__(self, name, location, age, aadhar_id,catalog):
+    def __init__(self, name, location, age, aadhar_id):
         self.name = name
         self.location = location
         self.age = age
         self.aadhar_id = aadhar_id
-        self.catalog = catalog
         self.issuedbook = {}
         
 
 class Member(User):
-    def __init__(self,name, location, age, aadhar_id,student_id,catalog):
-        super().__init__(name, location, age, aadhar_id,catalog)
+    def __init__(self,name, location, age, aadhar_id,student_id):
+        super().__init__(name, location, age, aadhar_id)
         self.student_id = student_id
         
     def __repr__(self):
         return self.name + ' ' + self.location + ' ' + self.student_id
     
     #assume name is unique
-    def issueBook(self,bookname,days=10):
-        book = self.catalog.searchByName(bookname.lower().strip())
+    def issueBook(self,bookname,catalog,days=10):
+        book = catalog.searchByName(bookname.lower().strip())
         if book:
             if book.total_count > 0:
                 book_item = book.book_item[0]
@@ -33,12 +32,12 @@ class Member(User):
             print("book not found")
     
     #assume name is unique
-    def returnBook(self,bookname):
+    def returnBook(self,bookname,catalog):
         if bookname in self.issuedbook:
             book_item = self.issuedbook[bookname]
-            book = self.catalog.searchByName(bookname.lower().strip())
+            book = catalog.searchByName(bookname.lower().strip())
             if book:
-                self.catalog.addBookItem(book,book_item.isbn,book_item.rack)
+                catalog.addBookItem(book,book_item.isbn,book_item.rack)
                 print("book has been returned")
             else:
                 print("This book is not exist")
@@ -51,21 +50,25 @@ class Member(User):
         
         
 class Librarian(User):
-    def __init__(self,name, location, age, aadhar_id,emp_id,catalog):
-        super().__init__(name, location, age, aadhar_id,catalog)
+    def __init__(self,name, location, age, aadhar_id,emp_id):
+        super().__init__(name, location, age, aadhar_id)
         self.emp_id = emp_id
         
     def __repr__(self):
         return self.name + self.location + self.emp_id
     
-    def addBook(self,name,author,publish_date,pages):
-        self.catalog.addBook(name,author,publish_date,pages)
+    def addBook(self,name,author,publish_date,pages,catalog):
+        return catalog.addBook(name,author,publish_date,pages)
+
+
+    def addBookItem(self, book, isbn, rack):
+        book.addBookItem(isbn, rack)
+
+    def removeBook(self,name,catalog):
+        catalog.removeBook(name)
     
-    def removeBook(self,name):
-        self.catalog.removeBook(name)
-    
-    def removeBookItemFromCatalog(self,bookname,isbn):
-        self.catalog.removeBookItem(bookname,isbn)
+    def removeBookItemFromCatalog(self,bookname,isbn,catalog):
+        catalog.removeBookItem(bookname,isbn)
     
     
         

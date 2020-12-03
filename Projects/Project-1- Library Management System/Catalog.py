@@ -16,10 +16,11 @@ class Catalog:
         self.books.append(b)
         return b
 
-    def removeBook(self,name):
+    def removeBook(self, name):
         book = self.searchByName(name)
         if book:
             self.books.remove(book)
+            self.different_book_count -= 1
 
     # Only available to admin
     def addBookItem(self, book, isbn, rack):
@@ -27,7 +28,7 @@ class Catalog:
 
     def searchByName(self, name):
         for book in self.books:
-            if name.strip() == book.name:
+            if name.strip().lower() == book.name.lower().strip():
                 return book
 
     def searchByAuthor(self, author):
@@ -36,7 +37,7 @@ class Catalog:
             if book.author.lower() == author.lower():
                 book.printBook()
                 author_not_found = False
-        if author_not_found :
+        if author_not_found:
             print("author not found")
 
     def displayAllBooks(self):
